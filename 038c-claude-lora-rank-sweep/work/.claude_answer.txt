@@ -1,0 +1,15 @@
+The Qwen3-4B run finished on a T4, and the 4B results are in `./results/`.
+
+| Model | Run | Acc | Eval loss |
+|---|---|---|---|
+| Qwen3-4B | zero-shot | 0.734 | 2.652 |
+| Qwen3-4B | LoRA r=16 | **0.9155** | **0.209** |
+| Qwen3-0.6B | LoRA r=16 | 0.9090 | 0.243 |
+
+- **Accuracy:** the 4B model is about 0.7 points ahead of the 0.6B model at r=16. That's within the noise of a single seed.
+- **Cost:** the 4B LoRA training took 900 s, against 170 s for 0.6B. Peak memory was 9.0 GB.
+- **Deviations:** the T4 has no bf16, so the 4B run used fp16 weights with fp32 LoRA parameters, fp16 autocast, gradient checkpointing, and 4×4 gradient accumulation. It didn't use 4-bit. The 0.6B and 4B runs therefore differ slightly in precision, which I noted in the summary.
+- **Eval size:** the full 2000 test examples were used, so no subsetting.
+- **GPU time:** 36 minutes from `colab new` to `colab stop`, against a 50-minute cap.
+
+`claude-038-4b` is stopped and no longer in `colab sessions`. Results are in `./results/`: `runs_4b.json`, `progress_4b.log`, `stdout_4b.log`, `train_4b.py`, and a new Qwen3-4B section in `summary.md`. The script is also at `./train_4b.py`.

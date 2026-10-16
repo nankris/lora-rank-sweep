@@ -1,0 +1,48 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+19:57:41 label token ids [[4337], [13180], [8025], [40372, 16731, 4737]]
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<02:32,  2.03it/s]Loading weights:  18%|█▊        | 56/311 [00:00<00:02, 124.72it/s]Loading weights:  30%|███       | 94/311 [00:00<00:01, 185.36it/s]Loading weights:  46%|████▌     | 142/311 [00:00<00:00, 258.92it/s]Loading weights:  59%|█████▊    | 182/311 [00:00<00:00, 293.44it/s]Loading weights:  73%|███████▎  | 227/311 [00:01<00:00, 336.10it/s]Loading weights:  87%|████████▋ | 270/311 [00:01<00:00, 361.86it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 262.85it/s]
+/content/train.py:112: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  scaler.step(opt); scaler.update(); sched.step()
+19:57:49 rank 4: trainable params 2523136
+19:57:50 rank 4 step 1/250 loss 6.7988 avg20 6.7988 t=1s
+19:58:07 rank 4 step 26/250 loss 0.1658 avg20 0.4833 t=18s
+19:58:24 rank 4 step 51/250 loss 0.4611 avg20 0.2938 t=35s
+19:58:41 rank 4 step 76/250 loss 0.0568 avg20 0.3139 t=53s
+19:58:58 rank 4 step 101/250 loss 0.2506 avg20 0.1957 t=69s
+19:59:15 rank 4 step 126/250 loss 0.1718 avg20 0.2099 t=86s
+19:59:32 rank 4 step 151/250 loss 0.1431 avg20 0.1952 t=103s
+19:59:49 rank 4 step 176/250 loss 0.1779 avg20 0.1758 t=120s
+20:00:07 rank 4 step 201/250 loss 0.2235 avg20 0.1442 t=138s
+20:00:23 rank 4 step 226/250 loss 0.4481 avg20 0.2516 t=154s
+20:00:39 rank 4 step 250/250 loss 0.4336 avg20 0.2641 t=170s
+20:02:58 lora_r4 {'run': 'lora_r4', 'rank': 4, 'lora_alpha': 8, 'trainable_params': 2523136, 'train_seconds': 170.37031173706055, 'peak_gpu_mem_gb': 10.99389184, 'final_train_loss': 0.43356242775917053, 'final_train_loss_avg20': 0.26410385239869355, 'eval_accuracy': 0.896, 'eval_loss': 0.25615278975358524, 'eval_seconds': 138.2609031200409}
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<02:31,  2.05it/s]Loading weights:  16%|█▌        | 50/311 [00:00<00:02, 111.50it/s]Loading weights:  32%|███▏      | 98/311 [00:00<00:01, 199.94it/s]Loading weights:  46%|████▌     | 143/311 [00:00<00:00, 264.03it/s]Loading weights:  60%|█████▉    | 186/311 [00:00<00:00, 307.79it/s]Loading weights:  74%|███████▍  | 230/311 [00:00<00:00, 343.43it/s]Loading weights:  87%|████████▋ | 272/311 [00:01<00:00, 348.88it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 254.61it/s]
+20:03:01 rank 16: trainable params 10092544
+20:03:01 rank 16 step 1/250 loss 6.7988 avg20 6.7988 t=1s
+20:03:18 rank 16 step 26/250 loss 0.1733 avg20 0.5383 t=18s
+20:03:36 rank 16 step 51/250 loss 0.5444 avg20 0.3158 t=35s
+20:03:52 rank 16 step 76/250 loss 0.1900 avg20 0.2718 t=52s
+20:04:09 rank 16 step 101/250 loss 0.2910 avg20 0.1946 t=68s
+20:04:26 rank 16 step 126/250 loss 0.1714 avg20 0.2057 t=85s
+20:04:44 rank 16 step 151/250 loss 0.1447 avg20 0.2065 t=103s
+20:05:00 rank 16 step 176/250 loss 0.1837 avg20 0.1924 t=120s
+20:05:18 rank 16 step 201/250 loss 0.2324 avg20 0.1412 t=137s
+20:05:34 rank 16 step 226/250 loss 0.5425 avg20 0.2531 t=154s
+20:05:51 rank 16 step 250/250 loss 0.3931 avg20 0.2533 t=170s
+20:08:10 lora_r16 {'run': 'lora_r16', 'rank': 16, 'lora_alpha': 32, 'trainable_params': 10092544, 'train_seconds': 169.8772587776184, 'peak_gpu_mem_gb': 11.143412736, 'final_train_loss': 0.39306214451789856, 'final_train_loss_avg20': 0.25332712521776557, 'eval_accuracy': 0.909, 'eval_loss': 0.24332048939078232, 'eval_seconds': 139.31787776947021}
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<02:28,  2.09it/s]Loading weights:  30%|███       | 94/311 [00:00<00:01, 213.65it/s]Loading weights:  62%|██████▏   | 192/311 [00:00<00:00, 394.18it/s]Loading weights:  85%|████████▍ | 263/311 [00:00<00:00, 416.66it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 327.01it/s]
+20:08:13 rank 64: trainable params 40370176
+20:08:14 rank 64 step 1/250 loss 6.7988 avg20 6.7988 t=1s
+20:08:31 rank 64 step 26/250 loss 0.0265 avg20 0.5468 t=18s
+20:08:49 rank 64 step 51/250 loss 0.5321 avg20 0.3582 t=36s
+20:09:07 rank 64 step 76/250 loss 0.2830 avg20 0.3241 t=53s
+20:09:23 rank 64 step 101/250 loss 0.3554 avg20 0.2704 t=70s
+20:09:41 rank 64 step 126/250 loss 0.2495 avg20 0.2331 t=88s
+20:09:59 rank 64 step 151/250 loss 0.1567 avg20 0.2221 t=106s
+20:10:16 rank 64 step 176/250 loss 0.3716 avg20 0.2488 t=123s
+20:10:34 rank 64 step 201/250 loss 0.1777 avg20 0.1578 t=141s
+20:10:51 rank 64 step 226/250 loss 0.5571 avg20 0.2501 t=158s
+20:11:08 rank 64 step 250/250 loss 0.3394 avg20 0.2434 t=175s
+20:13:29 lora_r64 {'run': 'lora_r64', 'rank': 64, 'lora_alpha': 128, 'trainable_params': 40370176, 'train_seconds': 174.7238531112671, 'peak_gpu_mem_gb': 11.746212864, 'final_train_loss': 0.33941853046417236, 'final_train_loss_avg20': 0.24335453798994422, 'eval_accuracy': 0.9065, 'eval_loss': 0.24708321003428135, 'eval_seconds': 141.50960731506348}
+20:13:29 DONE

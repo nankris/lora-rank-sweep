@@ -1,0 +1,32 @@
+[
+  {
+    "run": "zero_shot",
+    "model": "Qwen/Qwen3-4B",
+    "rank": 0,
+    "trainable_params": 0,
+    "train_seconds": 0.0,
+    "peak_gpu_mem_gb": null,
+    "final_train_loss": null,
+    "eval_seconds": 459.0506613254547,
+    "n_eval": 2000,
+    "eval_accuracy": 0.734,
+    "eval_loss": 2.651546801522374,
+    "eval_accuracy_first1000": 0.736
+  },
+  {
+    "run": "lora_r16",
+    "model": "Qwen/Qwen3-4B",
+    "rank": 16,
+    "lora_alpha": 32,
+    "trainable_params": 33030144,
+    "train_seconds": 899.9763369560242,
+    "peak_gpu_mem_gb": 9.009678848,
+    "final_train_loss": 0.5788713260553777,
+    "final_train_loss_avg20": 0.2324339246726595,
+    "eval_seconds": 632.7670187950134,
+    "n_eval": 2000,
+    "eval_accuracy": 0.9155,
+    "eval_loss": 0.2091098269611248,
+    "eval_accuracy_first1000": 0.913
+  }
+]
