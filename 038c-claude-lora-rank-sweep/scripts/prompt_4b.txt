@@ -1,0 +1,10 @@
+Follow-up in the same experiment (#038c). The Qwen3-0.6B sweep is done and its T4 session should be stopped (check `colab sessions`; if `claude-038` is still listed, stop it with `colab stop -s claude-038`).
+
+Now add a model-size comparison: Qwen/Qwen3-4B with LoRA rank 16 only (same data, hyper-parameters, prompt, answer-only loss and evaluation as your train.py), plus a Qwen3-4B zero-shot baseline. Use an L4 GPU in a NEW session: `colab new -s claude-038-4b --gpu L4` and always pass `-s claude-038-4b`. Never touch any other session.
+- If bf16 doesn't fit in L4 memory (24 GB) at batch 16, use gradient accumulation (e.g. batch 4 × 4) or gradient checkpointing before resorting to 4-bit. If you use 4-bit, say so.
+- Known Colab issue: peft can crash with Colab's old torchao; if you see a torchao error, run `pip uninstall -y torchao` on the VM and retry. Do this pre-emptively before training to save GPU time.
+- GPU budget for this session: at most 40 minutes from `colab new` to `colab stop`. If it's running long, evaluate on fewer examples (say so) rather than exceed it.
+- Same polling approach as before (background process on the VM, short polls).
+- When done or on failure: download results to `./results/` as `runs_4b.json` and `progress_4b.log`, save the script as `./train_4b.py`, then `colab stop -s claude-038-4b` and confirm with `colab sessions` it's gone. Mandatory.
+- Append a "Qwen3-4B r16" section to `./results/summary.md` with the numbers next to the 0.6B r16 row, and the GPU minutes of this L4 session.
+Keep messages brief.

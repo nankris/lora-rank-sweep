@@ -1,0 +1,11 @@
+You are running an ML experiment on a Google Colab T4 GPU using the authenticated `colab` CLI (already on PATH; run `colab --help` or `colab <cmd> --help` if you need syntax). Work in the current directory.
+
+Experiment (#038, LoRA rank sweep): fine-tune Qwen/Qwen3-0.6B with LoRA at ranks 4, 16 and 64 on AG News (HF dataset `fancyzhx/ag_news`, 4-way topic classification), 1 seed each, plus a zero-shot baseline. Use 4000 shuffled train examples (seed 1234), 1 epoch, lr 2e-4, batch 16, max length 192, LoRA alpha = 2*rank on all attention + MLP projections, loss only on the answer tokens. Evaluate on 2000 shuffled test examples: accuracy (argmax over the summed log-probs of the 4 label strings " World", " Sports", " Business", " Sci/Tech") and mean eval loss. Record per rank: trainable params, train wall-clock seconds, peak GPU memory, final train loss, eval accuracy, eval loss.
+
+Hard rules:
+1. Create exactly one session, named `claude-038`, with `colab new -s claude-038 --gpu T4`. Always pass `-s claude-038`. Never touch, stop or exec in any other session (other sessions belong to someone else).
+2. GPU budget: at most 60 minutes of runtime from `colab new` to `colab stop`. If you are running long, cut the sweep (e.g. drop rank 64) rather than exceed it.
+3. Your Bash tool calls time out after ~10 minutes, so do not run the whole training in one blocking `colab exec`. Instead launch the training as a background process on the VM (e.g. `colab exec` a snippet that runs `subprocess.Popen(["python","/content/train.py"], stdout=..., stderr=...)`), then poll a progress log with short `colab exec` calls and `sleep` in between (sleep at most 5 minutes per Bash call).
+4. When finished (or if anything fails), download the results to `./results/` (a `runs.json` with one record per rank + zero-shot, the training script, and the progress log), then run `colab stop -s claude-038` and confirm with `colab sessions` that `claude-038` is gone. This step is mandatory.
+5. Write `./results/summary.md`: a short table of the results and the exact GPU minutes used (from your session start to stop).
+Save the training script locally as `./train.py` too. Do not install anything locally. Keep your messages brief.
