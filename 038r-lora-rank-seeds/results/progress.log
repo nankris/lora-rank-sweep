@@ -1,0 +1,120 @@
+06:50:58 label token ids [[4337], [13180], [8025], [40372, 16731, 4737]]
+06:52:21 zero_shot {'run': 'zero_shot', 'rank': 0, 'trainable_params': 0, 'train_seconds': 0.0, 'peak_gpu_mem_gb': None, 'final_train_loss': None, 'eval_accuracy': 0.319, 'eval_loss': 5.686986880883574, 'eval_seconds': 64.50748825073242}
+06:52:23 rank 4: trainable params 2523136
+06:52:23 rank 4 step 1/250 loss 6.7968 avg20 6.7968 t=1s
+06:52:31 rank 4 step 26/250 loss 0.1621 avg20 0.4822 t=9s
+06:52:39 rank 4 step 51/250 loss 0.4478 avg20 0.2924 t=17s
+06:52:47 rank 4 step 76/250 loss 0.0585 avg20 0.3154 t=25s
+06:52:54 rank 4 step 101/250 loss 0.2545 avg20 0.1939 t=32s
+06:53:03 rank 4 step 126/250 loss 0.1629 avg20 0.2075 t=40s
+06:53:11 rank 4 step 151/250 loss 0.1480 avg20 0.1976 t=48s
+06:53:18 rank 4 step 176/250 loss 0.1770 avg20 0.1771 t=56s
+06:53:27 rank 4 step 201/250 loss 0.2195 avg20 0.1452 t=64s
+06:53:34 rank 4 step 226/250 loss 0.4320 avg20 0.2494 t=72s
+06:53:42 rank 4 step 250/250 loss 0.4317 avg20 0.2665 t=79s
+06:55:08 lora_r4_s1234 {'run': 'lora_r4_s1234', 'rank': 4, 'seed': 1234, 'lora_alpha': 8, 'trainable_params': 2523136, 'train_seconds': 79.23554587364197, 'peak_gpu_mem_gb': 10.992712704, 'final_train_loss': 0.4316975176334381, 'final_train_loss_avg20': 0.2664880758151412, 'eval_accuracy': 0.897, 'eval_loss': 0.2557287534786592, 'eval_seconds': 86.20082092285156}
+06:55:10 rank 16: trainable params 10092544
+06:55:10 rank 16 step 1/250 loss 6.7968 avg20 6.7968 t=0s
+06:55:18 rank 16 step 26/250 loss 0.1668 avg20 0.5460 t=8s
+06:55:26 rank 16 step 51/250 loss 0.4651 avg20 0.3041 t=16s
+06:55:34 rank 16 step 76/250 loss 0.1926 avg20 0.2706 t=24s
+06:55:42 rank 16 step 101/250 loss 0.2884 avg20 0.1953 t=32s
+06:55:50 rank 16 step 126/250 loss 0.1800 avg20 0.2046 t=40s
+06:55:58 rank 16 step 151/250 loss 0.1494 avg20 0.2056 t=48s
+06:56:06 rank 16 step 176/250 loss 0.1747 avg20 0.1928 t=56s
+06:56:14 rank 16 step 201/250 loss 0.2318 avg20 0.1410 t=64s
+06:56:21 rank 16 step 226/250 loss 0.5454 avg20 0.2574 t=71s
+06:56:29 rank 16 step 250/250 loss 0.3888 avg20 0.2557 t=79s
+06:57:55 lora_r16_s1234 {'run': 'lora_r16_s1234', 'rank': 16, 'seed': 1234, 'lora_alpha': 32, 'trainable_params': 10092544, 'train_seconds': 78.6882255077362, 'peak_gpu_mem_gb': 11.145509888, 'final_train_loss': 0.38878941535949707, 'final_train_loss_avg20': 0.25565841188654304, 'eval_accuracy': 0.907, 'eval_loss': 0.24463395824335749, 'eval_seconds': 86.29193305969238}
+06:57:57 rank 64: trainable params 40370176
+06:57:58 rank 64 step 1/250 loss 6.7968 avg20 6.7968 t=0s
+06:58:06 rank 64 step 26/250 loss 0.0284 avg20 0.5449 t=9s
+06:58:14 rank 64 step 51/250 loss 0.5882 avg20 0.3195 t=17s
+06:58:22 rank 64 step 76/250 loss 0.2093 avg20 0.3204 t=25s
+06:58:30 rank 64 step 101/250 loss 0.3284 avg20 0.2662 t=33s
+06:58:39 rank 64 step 126/250 loss 0.2402 avg20 0.2168 t=41s
+06:58:47 rank 64 step 151/250 loss 0.1295 avg20 0.2099 t=50s
+06:58:55 rank 64 step 176/250 loss 0.4247 avg20 0.2572 t=58s
+06:59:04 rank 64 step 201/250 loss 0.2390 avg20 0.1505 t=66s
+06:59:12 rank 64 step 226/250 loss 0.5528 avg20 0.2367 t=74s
+06:59:19 rank 64 step 250/250 loss 0.3874 avg20 0.2494 t=82s
+07:00:46 lora_r64_s1234 {'run': 'lora_r64_s1234', 'rank': 64, 'seed': 1234, 'lora_alpha': 128, 'trainable_params': 40370176, 'train_seconds': 82.12006735801697, 'peak_gpu_mem_gb': 11.748310016, 'final_train_loss': 0.38744863867759705, 'final_train_loss_avg20': 0.24940538667142392, 'eval_accuracy': 0.9095, 'eval_loss': 0.23857554985904425, 'eval_seconds': 86.93972086906433}
+07:00:48 rank 4: trainable params 2523136
+07:00:49 rank 4 step 1/250 loss 4.1428 avg20 4.1428 t=0s
+07:00:57 rank 4 step 26/250 loss 0.1669 avg20 0.4863 t=8s
+07:01:05 rank 4 step 51/250 loss 0.5025 avg20 0.3164 t=16s
+07:01:12 rank 4 step 76/250 loss 0.1936 avg20 0.2629 t=24s
+07:01:20 rank 4 step 101/250 loss 0.1011 avg20 0.2442 t=32s
+07:01:28 rank 4 step 126/250 loss 0.1303 avg20 0.2103 t=40s
+07:01:35 rank 4 step 151/250 loss 0.2778 avg20 0.1913 t=47s
+07:01:44 rank 4 step 176/250 loss 0.0669 avg20 0.2333 t=55s
+07:01:52 rank 4 step 201/250 loss 0.2835 avg20 0.1952 t=63s
+07:02:00 rank 4 step 226/250 loss 0.1880 avg20 0.2229 t=72s
+07:02:08 rank 4 step 250/250 loss 0.0973 avg20 0.1543 t=79s
+07:03:34 lora_r4_s1235 {'run': 'lora_r4_s1235', 'rank': 4, 'seed': 1235, 'lora_alpha': 8, 'trainable_params': 2523136, 'train_seconds': 79.16046595573425, 'peak_gpu_mem_gb': 10.994810368, 'final_train_loss': 0.097294881939888, 'final_train_loss_avg20': 0.15433418760076165, 'eval_accuracy': 0.897, 'eval_loss': 0.2530180766754929, 'eval_seconds': 86.25713443756104}
+07:03:36 rank 16: trainable params 10092544
+07:03:36 rank 16 step 1/250 loss 4.1428 avg20 4.1428 t=0s
+07:03:44 rank 16 step 26/250 loss 0.2970 avg20 0.5348 t=8s
+07:03:52 rank 16 step 51/250 loss 0.4999 avg20 0.3005 t=16s
+07:04:00 rank 16 step 76/250 loss 0.1918 avg20 0.2463 t=24s
+07:04:08 rank 16 step 101/250 loss 0.0995 avg20 0.2590 t=32s
+07:04:15 rank 16 step 126/250 loss 0.1494 avg20 0.2000 t=39s
+07:04:23 rank 16 step 151/250 loss 0.2569 avg20 0.2005 t=47s
+07:04:31 rank 16 step 176/250 loss 0.0679 avg20 0.2257 t=55s
+07:04:39 rank 16 step 201/250 loss 0.2905 avg20 0.2069 t=63s
+07:04:48 rank 16 step 226/250 loss 0.1869 avg20 0.2246 t=72s
+07:04:55 rank 16 step 250/250 loss 0.1092 avg20 0.1334 t=79s
+07:06:21 lora_r16_s1235 {'run': 'lora_r16_s1235', 'rank': 16, 'seed': 1235, 'lora_alpha': 32, 'trainable_params': 10092544, 'train_seconds': 78.9629418849945, 'peak_gpu_mem_gb': 11.144591872, 'final_train_loss': 0.10921622067689896, 'final_train_loss_avg20': 0.1334121827967465, 'eval_accuracy': 0.907, 'eval_loss': 0.2372466535322601, 'eval_seconds': 86.21418976783752}
+07:06:23 rank 64: trainable params 40370176
+07:06:24 rank 64 step 1/250 loss 4.1428 avg20 4.1428 t=0s
+07:06:32 rank 64 step 26/250 loss 0.1205 avg20 0.6279 t=9s
+07:06:40 rank 64 step 51/250 loss 0.3689 avg20 0.3969 t=17s
+07:06:48 rank 64 step 76/250 loss 0.1808 avg20 0.2677 t=25s
+07:06:57 rank 64 step 101/250 loss 0.1129 avg20 0.3032 t=33s
+07:07:05 rank 64 step 126/250 loss 0.2238 avg20 0.2570 t=42s
+07:07:13 rank 64 step 151/250 loss 0.2048 avg20 0.2250 t=49s
+07:07:21 rank 64 step 176/250 loss 0.0717 avg20 0.2116 t=58s
+07:07:30 rank 64 step 201/250 loss 0.2415 avg20 0.2178 t=66s
+07:07:39 rank 64 step 226/250 loss 0.1896 avg20 0.2266 t=75s
+07:07:46 rank 64 step 250/250 loss 0.0415 avg20 0.1337 t=83s
+07:09:13 lora_r64_s1235 {'run': 'lora_r64_s1235', 'rank': 64, 'seed': 1235, 'lora_alpha': 128, 'trainable_params': 40370176, 'train_seconds': 83.10658597946167, 'peak_gpu_mem_gb': 11.747392, 'final_train_loss': 0.04146888107061386, 'final_train_loss_avg20': 0.13369824229739607, 'eval_accuracy': 0.908, 'eval_loss': 0.23625996335958188, 'eval_seconds': 86.96322798728943}
+07:09:15 rank 4: trainable params 2523136
+07:09:16 rank 4 step 1/250 loss 3.7448 avg20 3.7448 t=0s
+07:09:24 rank 4 step 26/250 loss 0.2888 avg20 0.5008 t=8s
+07:09:32 rank 4 step 51/250 loss 0.3046 avg20 0.2870 t=17s
+07:09:40 rank 4 step 76/250 loss 0.0406 avg20 0.2833 t=25s
+07:09:48 rank 4 step 101/250 loss 0.5768 avg20 0.2627 t=33s
+07:09:56 rank 4 step 126/250 loss 0.1591 avg20 0.2065 t=41s
+07:10:04 rank 4 step 151/250 loss 0.4392 avg20 0.1914 t=48s
+07:10:11 rank 4 step 176/250 loss 0.1259 avg20 0.2385 t=56s
+07:10:20 rank 4 step 201/250 loss 0.0938 avg20 0.2001 t=64s
+07:10:28 rank 4 step 226/250 loss 0.0986 avg20 0.1721 t=72s
+07:10:35 rank 4 step 250/250 loss 0.1437 avg20 0.3050 t=80s
+07:12:01 lora_r4_s1236 {'run': 'lora_r4_s1236', 'rank': 4, 'seed': 1236, 'lora_alpha': 8, 'trainable_params': 2523136, 'train_seconds': 79.6989357471466, 'peak_gpu_mem_gb': 10.996681216, 'final_train_loss': 0.1437205821275711, 'final_train_loss_avg20': 0.30498061664402487, 'eval_accuracy': 0.891, 'eval_loss': 0.2573508342428395, 'eval_seconds': 86.28409147262573}
+07:12:03 rank 16: trainable params 10092544
+07:12:04 rank 16 step 1/250 loss 3.7448 avg20 3.7448 t=0s
+07:12:12 rank 16 step 26/250 loss 0.2905 avg20 0.5018 t=8s
+07:12:20 rank 16 step 51/250 loss 0.2822 avg20 0.3589 t=17s
+07:12:28 rank 16 step 76/250 loss 0.2044 avg20 0.3345 t=24s
+07:12:36 rank 16 step 101/250 loss 0.6361 avg20 0.2981 t=33s
+07:12:44 rank 16 step 126/250 loss 0.2138 avg20 0.2100 t=40s
+07:12:51 rank 16 step 151/250 loss 0.4632 avg20 0.1863 t=48s
+07:12:59 rank 16 step 176/250 loss 0.1061 avg20 0.2168 t=55s
+07:13:07 rank 16 step 201/250 loss 0.0738 avg20 0.1835 t=64s
+07:13:15 rank 16 step 226/250 loss 0.1281 avg20 0.1627 t=71s
+07:13:22 rank 16 step 250/250 loss 0.1637 avg20 0.2588 t=79s
+07:14:49 lora_r16_s1236 {'run': 'lora_r16_s1236', 'rank': 16, 'seed': 1236, 'lora_alpha': 32, 'trainable_params': 10092544, 'train_seconds': 78.94230127334595, 'peak_gpu_mem_gb': 11.147381248, 'final_train_loss': 0.1637105941772461, 'final_train_loss_avg20': 0.258808418828994, 'eval_accuracy': 0.9045, 'eval_loss': 0.2360545130909595, 'eval_seconds': 86.26538133621216}
+07:14:51 rank 64: trainable params 40370176
+07:14:52 rank 64 step 1/250 loss 3.7448 avg20 3.7448 t=0s
+07:15:00 rank 64 step 26/250 loss 0.5973 avg20 0.6765 t=9s
+07:15:09 rank 64 step 51/250 loss 0.6051 avg20 0.5029 t=17s
+07:15:17 rank 64 step 76/250 loss 0.3242 avg20 0.4200 t=26s
+07:15:25 rank 64 step 101/250 loss 0.4481 avg20 0.3379 t=34s
+07:15:33 rank 64 step 126/250 loss 0.2404 avg20 0.2414 t=42s
+07:15:41 rank 64 step 151/250 loss 0.3177 avg20 0.2617 t=50s
+07:15:49 rank 64 step 176/250 loss 0.1477 avg20 0.2474 t=58s
+07:15:58 rank 64 step 201/250 loss 0.1240 avg20 0.1975 t=67s
+07:16:06 rank 64 step 226/250 loss 0.2399 avg20 0.1499 t=75s
+07:16:14 rank 64 step 250/250 loss 0.1726 avg20 0.2617 t=83s
+07:17:41 lora_r64_s1236 {'run': 'lora_r64_s1236', 'rank': 64, 'seed': 1236, 'lora_alpha': 128, 'trainable_params': 40370176, 'train_seconds': 82.55262589454651, 'peak_gpu_mem_gb': 11.750181376, 'final_train_loss': 0.17262306809425354, 'final_train_loss_avg20': 0.26173589946702125, 'eval_accuracy': 0.9045, 'eval_loss': 0.22977751215058378, 'eval_seconds': 86.91246175765991}
+07:17:41 DONE

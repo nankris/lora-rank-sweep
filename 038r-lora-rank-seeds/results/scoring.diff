@@ -1,0 +1,224 @@
+--- 038r-lora-rank-seeds/reference/sweep_038.py	2026-10-15 01:43:16.256905996 +0000
++++ 038r-lora-rank-seeds/reference/train_038c.py	2026-10-15 01:43:16.253424994 +0000
+@@ -1,111 +1,123 @@
+-"""#038 LoRA rank sweep: Qwen3-0.6B on AG News (4-way topic classification), ranks 4/16/64 x 3 seeds + zero-shot.
+-Run on a Colab T4. Writes /content/results038/{runs.jsonl,progress.log}.
+-Loss is computed only on the answer tokens. Accuracy = argmax over the 4 label strings' summed log-probs.
+-"""
+-import os, json, time, random, math, sys
++# Exp #038: LoRA rank sweep, Qwen3-0.6B on AG News. Writes /content/out/{runs.json,progress.log}
++import json, math, os, sys, time
+ import torch, torch.nn.functional as F
+ from datasets import load_dataset
+-from transformers import AutoTokenizer, AutoModelForCausalLM
++from transformers import AutoModelForCausalLM, AutoTokenizer
+ from peft import LoraConfig, get_peft_model
+ 
+-OUT = "/content/results038"; os.makedirs(OUT, exist_ok=True)
+-MODEL = "Qwen/Qwen3-0.6B"
+-RANKS = [4, 16, 64]
+-SEEDS = [0, 1, 2]
+-N_TRAIN, N_EVAL = 4000, 2000
+-BATCH, LR, EPOCHS, MAXLEN = 16, 2e-4, 1, 192
+-LABELS = ["World", "Sports", "Business", "Sci/Tech"]
+-T0 = time.time()
+-def plog(m):
+-    with open(f"{OUT}/progress.log", "a") as f: f.write(f"[{time.time()-T0:6.0f}s] {m}\n")
++OUT = "/content/out"; os.makedirs(OUT, exist_ok=True)
++LOG = open(f"{OUT}/progress.log", "a", buffering=1)
++def log(*a):
++    s = time.strftime("%H:%M:%S ") + " ".join(str(x) for x in a)
++    print(s); LOG.write(s + "\n")
++
++MODEL = "Qwen/Qwen3-0.6B"; SEED = 1234
++N_TRAIN, N_TEST, LR, BS, MAXLEN = 4000, 2000, 2e-4, 16, 192
++RANKS = [int(r) for r in os.environ.get("RANKS", "4,16,64").split(",")]
++LABELS = [" World", " Sports", " Business", " Sci/Tech"]
++TARGETS = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
++dev = "cuda"
+ 
+ tok = AutoTokenizer.from_pretrained(MODEL)
+-tok.padding_side = "right"
++PAD = tok.pad_token_id if tok.pad_token_id is not None else tok.eos_token_id
++HEAD = tok("Classify the topic of this news article as World, Sports, Business, or Sci/Tech.\nArticle: ", add_special_tokens=False).input_ids
++TAIL = tok("\nTopic:", add_special_tokens=False).input_ids
++LAB_IDS = [tok(l, add_special_tokens=False).input_ids for l in LABELS]
++MAXLAB = max(len(l) for l in LAB_IDS)
++log("label token ids", LAB_IDS)
++
++def prompt_ids(text):
++    budget = MAXLEN - len(HEAD) - len(TAIL) - MAXLAB
++    body = tok(text, add_special_tokens=False).input_ids[:budget]
++    return HEAD + body + TAIL
++
+ ds = load_dataset("fancyzhx/ag_news")
+-train = ds["train"].shuffle(seed=1234).select(range(N_TRAIN))
+-evl = ds["test"].shuffle(seed=1234).select(range(N_EVAL))
+-def prompt(text):
+-    return ("Classify the news article into one of: World, Sports, Business, Sci/Tech.\n"
+-            f"Article: {text.strip()[:600]}\nAnswer:")
+-label_ids = [tok(" " + l, add_special_tokens=False)["input_ids"] + [tok.eos_token_id] for l in LABELS]
+-plog(f"label token ids {label_ids}")
+-
+-def encode(text, lab):
+-    p = tok(prompt(text), add_special_tokens=False)["input_ids"][: MAXLEN - 8]
+-    a = label_ids[lab]
+-    return p + a, [-100]*len(p) + a
+-
+-def collate(items):
+-    L = max(len(x[0]) for x in items)
+-    ids = torch.full((len(items), L), tok.pad_token_id); lab = torch.full((len(items), L), -100); att = torch.zeros((len(items), L), dtype=torch.long)
+-    for i, (x, y) in enumerate(items):
+-        ids[i, :len(x)] = torch.tensor(x); lab[i, :len(y)] = torch.tensor(y); att[i, :len(x)] = 1
+-    return ids.cuda(), att.cuda(), lab.cuda()
++train = ds["train"].shuffle(seed=SEED).select(range(N_TRAIN))
++test = ds["test"].shuffle(seed=SEED).select(range(N_TEST))
++train_ex = [(prompt_ids(t), y) for t, y in zip(train["text"], train["label"])]
++test_ex = [(prompt_ids(t), y) for t, y in zip(test["text"], test["label"])]
++
++def collate(pairs):
++    """pairs: list of (prompt_ids, answer_ids). Left-pad so answers sit at the end; labels -100 except answer tokens."""
++    L = max(len(p) + len(a) for p, a in pairs)
++    ids = torch.full((len(pairs), L), PAD); att = torch.zeros((len(pairs), L), dtype=torch.long)
++    lab = torch.full((len(pairs), L), -100)
++    for i, (p, a) in enumerate(pairs):
++        s = p + a; o = L - len(s); ids[i, o:] = torch.tensor(s); att[i, o:] = 1
++        lab[i, L - len(a):] = torch.tensor(a)
++    pos = (att.cumsum(-1) - 1).clamp(min=0)
++    return ids.to(dev), att.to(dev), pos.to(dev), lab.to(dev)
+ 
+-def seq_logprob(model, ids, att, lab):
++K = MAXLAB + 1  # only compute logits for the last K positions (covers all answer tokens)
++def answer_logits(model, ids, att, pos, lab):
+     with torch.autocast("cuda", dtype=torch.float16):
+-        logits = model(input_ids=ids, attention_mask=att).logits.float()
+-    lp = torch.log_softmax(logits[:, :-1], -1); tgt = lab[:, 1:]
+-    m = tgt != -100
+-    g = lp.gather(-1, tgt.clamp(min=0).unsqueeze(-1)).squeeze(-1) * m
+-    return g.sum(-1), m.sum(-1)
++        logits = model(input_ids=ids, attention_mask=att, position_ids=pos, logits_to_keep=K).logits[:, :-1]
++    return logits.float(), lab[:, -(K - 1):]
++
++def answer_logprobs(model, ids, att, pos, lab):
++    """Return per-sequence summed log-prob of answer tokens and token count."""
++    logits, tgt = answer_logits(model, ids, att, pos, lab); mask = tgt != -100
++    lp = torch.log_softmax(logits, -1).gather(-1, tgt.clamp(min=0).unsqueeze(-1)).squeeze(-1)
++    return (lp * mask).sum(1), mask.sum(1)
+ 
+ @torch.no_grad()
+-def evaluate(model):
+-    model.eval(); correct = 0; nll = 0.0; ntok = 0
+-    for s in range(0, N_EVAL, 32):
+-        rows = evl.select(range(s, min(s+32, N_EVAL)))
+-        scores = []
+-        for k in range(4):
+-            batch = [encode(r["text"], k) for r in rows]
+-            lp, n = seq_logprob(model, *collate(batch)); scores.append(lp)
+-            for j, r in enumerate(rows):
+-                if r["label"] == k: nll -= lp[j].item(); ntok += n[j].item()
+-        S = torch.stack(scores, 1)
+-        correct += (S.argmax(1).cpu() == torch.tensor(rows["label"])).sum().item()
+-    model.train()
+-    return correct / N_EVAL, nll / ntok
+-
+-def fresh():
+-    m = AutoModelForCausalLM.from_pretrained(MODEL, torch_dtype=torch.float32).cuda()
+-    m.config.use_cache = False
+-    return m
+-
+-runs = open(f"{OUT}/runs.jsonl", "a")
+-# zero-shot baseline
+-m = fresh(); t = time.time(); acc, loss = evaluate(m)
+-rec = {"rank": 0, "seed": None, "eval_acc": acc, "eval_loss": loss, "train_s": 0, "eval_s": time.time()-t, "trainable_params": 0}
+-runs.write(json.dumps(rec)+"\n"); runs.flush(); plog(json.dumps(rec)); del m; torch.cuda.empty_cache()
++def evaluate(model, ebs=16):
++    model.eval(); correct = 0; losses = []
++    for i in range(0, len(test_ex), ebs):
++        chunk = test_ex[i:i + ebs]
++        pairs = [(p, LAB_IDS[k]) for p, _ in chunk for k in range(4)]
++        s, n = answer_logprobs(model, *collate(pairs))
++        s = s.view(len(chunk), 4); n = n.view(len(chunk), 4)
++        for j, (_, y) in enumerate(chunk):
++            correct += int(s[j].argmax().item() == y)
++            losses.append((-s[j, y] / n[j, y]).item())  # mean per-token CE on gold answer
++    return correct / len(test_ex), sum(losses) / len(losses)
++
++def load_base():
++    torch.manual_seed(SEED)
++    return AutoModelForCausalLM.from_pretrained(MODEL, torch_dtype=torch.float32).to(dev)
++
++res_path = f"{OUT}/runs.json"
++runs = json.load(open(res_path)) if os.path.exists(res_path) else []
++def save():
++    json.dump(runs, open(res_path, "w"), indent=2)
++
++if not any(r["run"] == "zero_shot" for r in runs):
++    m = load_base(); t0 = time.time()
++    acc, el = evaluate(m)
++    runs.append(dict(run="zero_shot", rank=0, trainable_params=0, train_seconds=0.0,
++                     peak_gpu_mem_gb=None, final_train_loss=None, eval_accuracy=acc, eval_loss=el,
++                     eval_seconds=time.time() - t0))
++    save(); log("zero_shot", runs[-1]); del m; torch.cuda.empty_cache()
+ 
+-train_enc = [encode(r["text"], r["label"]) for r in train]
+ for r in RANKS:
+-    for seed in SEEDS:
+-        random.seed(seed); torch.manual_seed(seed)
+-        m = fresh()
+-        cfg = LoraConfig(r=r, lora_alpha=2*r, lora_dropout=0.05, target_modules=["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"], task_type="CAUSAL_LM")
+-        m = get_peft_model(m, cfg)
+-        ntrain = sum(p.numel() for p in m.parameters() if p.requires_grad)
+-        opt = torch.optim.AdamW([p for p in m.parameters() if p.requires_grad], lr=LR, weight_decay=0.0)
+-        scaler = torch.amp.GradScaler("cuda")
+-        order = list(range(N_TRAIN)); random.shuffle(order)
+-        steps = math.ceil(N_TRAIN / BATCH) * EPOCHS; warm = int(0.05*steps)
+-        sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda s: min(1.0, (s+1)/max(1, warm)) * max(0.0, (steps - s) / steps))
+-        torch.cuda.reset_peak_memory_stats(); torch.cuda.synchronize(); t = time.time(); losses = []
+-        for step in range(steps):
+-            idx = order[(step*BATCH) % N_TRAIN: (step*BATCH) % N_TRAIN + BATCH]
+-            ids, att, lab = collate([train_enc[i] for i in idx])
+-            with torch.autocast("cuda", dtype=torch.float16):
+-                out = m(input_ids=ids, attention_mask=att, labels=lab)
+-            scaler.scale(out.loss).backward(); scaler.unscale_(opt)
+-            torch.nn.utils.clip_grad_norm_(m.parameters(), 1.0)
+-            scaler.step(opt); scaler.update(); opt.zero_grad(set_to_none=True); sched.step()
+-            losses.append(out.loss.item())
+-        torch.cuda.synchronize(); tt = time.time() - t
+-        t2 = time.time(); acc, loss = evaluate(m)
+-        rec = {"rank": r, "seed": seed, "eval_acc": acc, "eval_loss": loss, "train_s": tt, "eval_s": time.time()-t2,
+-               "trainable_params": ntrain, "peak_mem_gb": torch.cuda.max_memory_allocated()/1e9, "steps": steps,
+-               "train_loss_first20": sum(losses[:20])/20, "train_loss_last20": sum(losses[-20:])/20, "train_losses": losses}
+-        runs.write(json.dumps(rec)+"\n"); runs.flush()
+-        plog(json.dumps({k: v for k, v in rec.items() if k != "train_losses"}))
+-        del m, opt; torch.cuda.empty_cache()
+-plog("ALL DONE")
++    if any(x["run"] == f"lora_r{r}" for x in runs): continue
++    m = load_base()
++    m = get_peft_model(m, LoraConfig(r=r, lora_alpha=2 * r, lora_dropout=0.0, target_modules=TARGETS, task_type="CAUSAL_LM"))
++    ntrain = sum(p.numel() for p in m.parameters() if p.requires_grad)
++    log(f"rank {r}: trainable params {ntrain}")
++    opt = torch.optim.AdamW([p for p in m.parameters() if p.requires_grad], lr=LR, weight_decay=0.0)
++    scaler = torch.amp.GradScaler("cuda")
++    g = torch.Generator().manual_seed(SEED); order = torch.randperm(N_TRAIN, generator=g).tolist()
++    steps = math.ceil(N_TRAIN / BS)
++    sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda s: min(1.0, (s + 1) / 10) * max(0.0, 1 - s / steps))
++    torch.cuda.synchronize(); torch.cuda.reset_peak_memory_stats(); t0 = time.time()
++    m.train(); recent = []
++    for step in range(steps):
++        batch = [train_ex[i] for i in order[step * BS:(step + 1) * BS]]
++        logits, tgt = answer_logits(m, *collate([(p, LAB_IDS[y]) for p, y in batch]))
++        loss = F.cross_entropy(logits.reshape(-1, logits.size(-1)), tgt.reshape(-1), ignore_index=-100)
++        opt.zero_grad(set_to_none=True); scaler.scale(loss).backward()
++        scaler.unscale_(opt); torch.nn.utils.clip_grad_norm_([p for p in m.parameters() if p.requires_grad], 1.0)
++        scaler.step(opt); scaler.update(); sched.step()
++        recent.append(loss.item()); recent = recent[-20:]
++        if step % 25 == 0 or step == steps - 1:
++            log(f"rank {r} step {step + 1}/{steps} loss {loss.item():.4f} avg20 {sum(recent)/len(recent):.4f} t={time.time()-t0:.0f}s")
++    torch.cuda.synchronize(); train_s = time.time() - t0
++    peak = torch.cuda.max_memory_allocated() / 1e9
++    t1 = time.time(); acc, el = evaluate(m)
++    runs.append(dict(run=f"lora_r{r}", rank=r, lora_alpha=2 * r, trainable_params=ntrain, train_seconds=train_s,
++                     peak_gpu_mem_gb=peak, final_train_loss=recent[-1], final_train_loss_avg20=sum(recent) / len(recent),
++                     eval_accuracy=acc, eval_loss=el, eval_seconds=time.time() - t1))
++    save(); log(f"lora_r{r}", runs[-1]); del m, opt; torch.cuda.empty_cache()
++log("DONE")

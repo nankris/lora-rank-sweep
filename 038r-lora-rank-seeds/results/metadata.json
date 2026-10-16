@@ -1,0 +1,11 @@
+{
+  "gpu": "NVIDIA L4",
+  "train_fingerprint": "eace0f1f458604fd",
+  "test_fingerprint": "5fc7a8cc6e27ae6d",
+  "versions": {
+    "torch": "2.11.0+cu130",
+    "transformers": "5.18.0",
+    "peft": "0.21.1",
+    "datasets": "4.8.5"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "gpu": "NVIDIA L4",
+  "start_upper_bound": "2026-10-15T06:49:54.440240+00:00",
+  "stop": "2026-10-15T07:19:22+00:00",
+  "elapsed_seconds_upper_bound": 1767.55976,
+  "incremental_cu_per_hour": 1.54,
+  "estimated_cu_upper_bound": 0.7561227862222223,
+  "method": "Conservative elapsed time from before allocation until confirmed stop \u00d7 incremental account rate (3.08\u22121.54 CU/hour); includes setup, evaluations and artifact retrieval. Shared account balance difference is not session consumption."
+}
