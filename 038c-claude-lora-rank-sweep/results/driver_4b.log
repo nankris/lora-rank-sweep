@@ -1,0 +1,3 @@
+start 1792009028 jobs=1 P=1
+claude_driver_4b__colab038_4b__r1: pass=False sub=None tok=347158 cc=52446 cr=286498 out=8200 cost=$0.6732085800000001 turns=7 tools={'Bash': 5, 'Write': 1} wall=904s 5h=0.95 7d=0.73 
+done 1792009932

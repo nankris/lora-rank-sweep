@@ -1,0 +1,41 @@
+20:35:01 label token ids [[4337], [13180], [8025], [40372, 16731, 4737]]
+20:36:57 eval 8/2000 acc_so_far 0.7500
+20:38:17 eval 408/2000 acc_so_far 0.7230
+20:39:52 eval 808/2000 acc_so_far 0.7314
+20:41:29 eval 1208/2000 acc_so_far 0.7409
+20:43:04 eval 1608/2000 acc_so_far 0.7357
+20:44:33 zero_shot {'run': 'zero_shot', 'model': 'Qwen/Qwen3-4B', 'rank': 0, 'trainable_params': 0, 'train_seconds': 0.0, 'peak_gpu_mem_gb': None, 'final_train_loss': None, 'eval_seconds': 459.0506613254547, 'n_eval': 2000, 'eval_accuracy': 0.734, 'eval_loss': 2.651546801522374, 'eval_accuracy_first1000': 0.736}
+20:45:08 rank 16: trainable params 33030144, lora dtype torch.float32
+20:45:12 rank 16 step 1/250 loss 3.6410 avg20 3.6410 t=4s peak 8.79GB
+20:45:50 rank 16 step 11/250 loss 0.2143 avg20 1.0523 t=42s peak 8.98GB
+20:46:26 rank 16 step 21/250 loss 0.5760 avg20 0.5832 t=78s peak 8.98GB
+20:47:02 rank 16 step 31/250 loss 0.4051 avg20 0.3664 t=114s peak 9.01GB
+20:47:38 rank 16 step 41/250 loss 0.3866 avg20 0.3591 t=150s peak 9.01GB
+20:48:14 rank 16 step 51/250 loss 0.4299 avg20 0.2881 t=186s peak 9.01GB
+20:48:50 rank 16 step 61/250 loss 0.4478 avg20 0.2178 t=221s peak 9.01GB
+20:49:26 rank 16 step 71/250 loss 0.4766 avg20 0.2805 t=257s peak 9.01GB
+20:50:01 rank 16 step 81/250 loss 0.0431 avg20 0.2731 t=292s peak 9.01GB
+20:50:36 rank 16 step 91/250 loss 0.4414 avg20 0.2359 t=328s peak 9.01GB
+20:51:11 rank 16 step 101/250 loss 0.4280 avg20 0.2359 t=363s peak 9.01GB
+20:51:48 rank 16 step 111/250 loss 0.0567 avg20 0.1805 t=400s peak 9.01GB
+20:52:24 rank 16 step 121/250 loss 0.0770 avg20 0.1681 t=435s peak 9.01GB
+20:52:59 rank 16 step 131/250 loss 0.4426 avg20 0.2096 t=471s peak 9.01GB
+20:53:35 rank 16 step 141/250 loss 0.1577 avg20 0.2138 t=506s peak 9.01GB
+20:54:13 rank 16 step 151/250 loss 0.1089 avg20 0.1909 t=545s peak 9.01GB
+20:54:49 rank 16 step 161/250 loss 0.0883 avg20 0.1572 t=581s peak 9.01GB
+20:55:25 rank 16 step 171/250 loss 0.2578 avg20 0.1694 t=617s peak 9.01GB
+20:56:01 rank 16 step 181/250 loss 0.0245 avg20 0.2073 t=653s peak 9.01GB
+20:56:38 rank 16 step 191/250 loss 0.0441 avg20 0.1643 t=690s peak 9.01GB
+20:57:14 rank 16 step 201/250 loss 0.2815 avg20 0.1295 t=725s peak 9.01GB
+20:57:48 rank 16 step 211/250 loss 0.1473 avg20 0.1576 t=760s peak 9.01GB
+20:58:24 rank 16 step 221/250 loss 0.2404 avg20 0.2145 t=796s peak 9.01GB
+20:59:00 rank 16 step 231/250 loss 0.3540 avg20 0.2340 t=831s peak 9.01GB
+20:59:36 rank 16 step 241/250 loss 0.3003 avg20 0.2020 t=867s peak 9.01GB
+21:00:08 rank 16 step 250/250 loss 0.5789 avg20 0.2324 t=900s peak 9.01GB
+21:00:11 eval 8/2000 acc_so_far 1.0000
+21:02:17 eval 408/2000 acc_so_far 0.9191
+21:04:25 eval 808/2000 acc_so_far 0.9097
+21:06:33 eval 1208/2000 acc_so_far 0.9164
+21:08:41 eval 1608/2000 acc_so_far 0.9148
+21:10:41 lora_r16 {'run': 'lora_r16', 'model': 'Qwen/Qwen3-4B', 'rank': 16, 'lora_alpha': 32, 'trainable_params': 33030144, 'train_seconds': 899.9763369560242, 'peak_gpu_mem_gb': 9.009678848, 'final_train_loss': 0.5788713260553777, 'final_train_loss_avg20': 0.2324339246726595, 'eval_seconds': 632.7670187950134, 'n_eval': 2000, 'eval_accuracy': 0.9155, 'eval_loss': 0.2091098269611248, 'eval_accuracy_first1000': 0.913}
+21:10:41 DONE
